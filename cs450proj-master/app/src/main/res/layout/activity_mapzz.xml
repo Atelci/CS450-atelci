@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:visibility="visible"
     android:background="@color/gray"
-    tools:context="com.example.bugra.mapzz.Mapzz">
+    tools:context="com.example.bugra.mapzz.ui.Mapzz">
 
 
     <TextView

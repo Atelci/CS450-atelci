@@ -1,15 +1,13 @@
-package com.example.bugra.mapzz;
+package com.example.bugra.mapzz.ui;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.bugra.mapzz.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
@@ -21,7 +19,7 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
     public CustomInfoWindowGoogleMap(Context ctx){
         mcontext = ctx;
         view= LayoutInflater.from(ctx)
-                .inflate(R.layout.infowindow,null);
+                .inflate( R.layout.infowindow,null);
     }
     @Override
     public View getInfoWindow(Marker marker) {

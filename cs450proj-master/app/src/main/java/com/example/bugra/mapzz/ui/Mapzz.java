@@ -1,4 +1,4 @@
-package com.example.bugra.mapzz;
+package com.example.bugra.mapzz.ui;
 import android.content.Intent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.example.bugra.mapzz.R;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -50,7 +51,7 @@ public class Mapzz extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        setContentView(R.layout.activity_mapzz);
+        setContentView( R.layout.activity_mapzz);
 
         legend = (LinearLayout) findViewById(R.id.legendlayout);
         legend2 = (TextView) findViewById(R.id.legend2layout);

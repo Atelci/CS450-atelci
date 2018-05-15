@@ -1,4 +1,4 @@
-package com.example.bugra.mapzz;
+package com.example.bugra.mapzz.ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,15 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.bugra.mapzz.R;
+
 public class plantActivity extends AppCompatActivity {
     private TextView profiltext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plant);
+        setContentView( R.layout.activity_plant);
 
-        profiltext = (TextView) findViewById(R.id.textView10);
+        profiltext = findViewById(R.id.textView10);
 
         profiltext.setOnClickListener(new View.OnClickListener() {
             @Override

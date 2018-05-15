@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray"
     android:theme="@style/Theme.AppCompat.NoActionBar"
-    tools:context=".plantActivity">
+    tools:context=".ui.plantActivity">
 
     <ImageView
         android:id="@+id/imageView2"
