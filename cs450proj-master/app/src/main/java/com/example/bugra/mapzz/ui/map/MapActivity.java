@@ -28,9 +28,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
 
-    LoginButton loginButton;
-    CallbackManager callbackManager;
-    MapActivityViewModel viewModel;
+    private CallbackManager callbackManager;
+    private MapActivityViewModel viewModel;
 
     //GPSTracker gps = new GPSTracker(this);
 
@@ -44,19 +43,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         super.onCreate( savedInstanceState );
 
         viewModel = ViewModelProviders.of( this ).get( MapActivityViewModel.class );
-
         mViewDataBinding.setVariable( BR.viewModel, viewModel );
 
-
-
-
+        //  Get Google Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById( R.id.map );
         mapFragment.getMapAsync( this );
 
-        loginButton = findViewById( R.id.fblogin );
+        //  Configure facebook login button
+        LoginButton loginButton = findViewById( R.id.fblogin );
         callbackManager = CallbackManager.Factory.create();
-
 
         loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
 
@@ -80,6 +76,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         } );
 
+
         findViewById( R.id.marker_details ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
@@ -93,6 +90,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady( GoogleMap googleMap ) {
 
+        //  Configure Google Map
         googleMap.getUiSettings().setZoomControlsEnabled( true );
         googleMap.setMinZoomPreference( 11 );
 
@@ -101,7 +99,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap( this );
         googleMap.setInfoWindowAdapter( customInfoWindow );
 
-
+        //  Set click listeners
         googleMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick( Marker marker ) {
@@ -117,7 +115,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         } );
 
-
+        //  Setup Google Map
         viewModel.setMap( googleMap );
         viewModel.setupMap();
     }

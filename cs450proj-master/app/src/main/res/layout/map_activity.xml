@@ -10,7 +10,7 @@
             name="viewModel"
             type="com.example.bugra.mapzz.ui.map.MapActivityViewModel" />
 
-        <import type="com.example.bugra.mapzz.ui.map.MapActivityViewModel.PLANT_TYPE" />
+        <import type="com.example.bugra.mapzz.model.Plant.TYPE" />
 
         <import type="android.view.View" />
     </data>
@@ -118,7 +118,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="@{() -> viewModel.filterMarkers( PLANT_TYPE.GREENERY )}"
+                    android:onClick="@{() -> viewModel.filterMarkers( TYPE.GREENERY )}"
                     android:orientation="vertical">
 
                     <ImageView
@@ -142,7 +142,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="@{() -> viewModel.filterMarkers( PLANT_TYPE.FARMING )}"
+                    android:onClick="@{() -> viewModel.filterMarkers( TYPE.FARMING )}"
                     android:orientation="vertical">
 
                     <ImageView
@@ -166,7 +166,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:onClick="@{() -> viewModel.filterMarkers( PLANT_TYPE.FLOWERS )}"
+                    android:onClick="@{() -> viewModel.filterMarkers( TYPE.FLOWERS )}"
                     android:orientation="vertical">
 
                     <ImageView

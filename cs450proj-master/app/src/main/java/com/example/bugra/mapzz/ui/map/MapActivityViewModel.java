@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.bugra.mapzz.R;
+import com.example.bugra.mapzz.model.Plant;
+import com.example.bugra.mapzz.repository.PlantRepository;
 import com.facebook.AccessToken;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,28 +28,9 @@ public class MapActivityViewModel extends ViewModel {
 
     static private final String TAG = "MapActivityViewModel";
 
-    public enum PLANT_TYPE {
-        GREENERY,
-        FARMING,
-        FLOWERS;
-
-        static public int getMarkerIcon( PLANT_TYPE type ) {
-
-            switch( type ) {
-                case GREENERY:
-                    return R.drawable.yesilmark;
-                case FARMING:
-                    return R.drawable.turuncumark;
-                case FLOWERS:
-                    return R.drawable.mormark;
-                default:
-                    return 0;
-            }
-        }
-    }
-
-    private PLANT_TYPE currentFilter;
     private ArrayList<Marker> markers = new ArrayList<>();
+    private PlantRepository repository = new PlantRepository();
+    private Plant.TYPE currentFilter;
     private GoogleMap map;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -83,12 +66,26 @@ public class MapActivityViewModel extends ViewModel {
         this.map = map;
     }
 
-    public Marker addMarker( LatLng latLng, PLANT_TYPE plantType ) {
+    static private int getMarkerIcon( Plant.TYPE type ) {
+
+        switch( type ) {
+            case GREENERY:
+                return R.drawable.yesilmark;
+            case FARMING:
+                return R.drawable.turuncumark;
+            case FLOWERS:
+                return R.drawable.mormark;
+            default:
+                return 0;
+        }
+    }
+
+    public Marker addMarker( LatLng latLng, Plant.TYPE plantType ) {
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position( latLng )
                 .title( plantType.toString() )
-                .icon( BitmapDescriptorFactory.fromResource( PLANT_TYPE.getMarkerIcon( plantType ) ) );
+                .icon( BitmapDescriptorFactory.fromResource( getMarkerIcon( plantType ) ) );
 
         Marker marker = map.addMarker( markerOptions );
 
@@ -106,7 +103,7 @@ public class MapActivityViewModel extends ViewModel {
         return marker;
     }
 
-    public void filterMarkers( PLANT_TYPE plantType ) {
+    public void filterMarkers( Plant.TYPE plantType ) {
 
         if( currentFilter != null  &&  currentFilter.equals( plantType ) ) {
             for( Marker m : markers ) {
@@ -129,14 +126,12 @@ public class MapActivityViewModel extends ViewModel {
 
     public void setupMap() {
 
-        LatLng coord1 = new LatLng( 41.015137, 28.979530 );
-        LatLng coord2 = new LatLng( 41.020812, 28.988956 );
-        LatLng coord3 = new LatLng( 41.0233323, 28.9749202 );
+        for( int i=0; i<24; i++ ) {
 
-        addMarker( coord1, PLANT_TYPE.GREENERY );
-        addMarker( coord2, PLANT_TYPE.FLOWERS );
-        addMarker( coord3, PLANT_TYPE.FARMING );
+            Plant plant = repository.getRandomPlant();
+            addMarker( new LatLng( plant.getLat(), plant.getLng() ), plant.getType() );
+        }
 
-        map.moveCamera( CameraUpdateFactory.newLatLng( coord1 ) );
+        map.moveCamera( CameraUpdateFactory.newLatLng( new LatLng( 41.015137, 28.979530 ) ) );
     }
 }
