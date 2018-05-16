@@ -41,10 +41,10 @@
 
         <activity
             android:name=".ui.layout"
-            android:parentActivityName=".ui.Mapzz"
+            android:parentActivityName=".ui.map.MapActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
         <activity
-            android:name=".ui.Mapzz"
+            android:name=".ui.map.MapActivity"
             android:label="@string/title_activity_mapzz"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
