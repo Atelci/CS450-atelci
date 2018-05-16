@@ -51,11 +51,12 @@ public class MapActivityViewModel extends ViewModel {
     private GoogleMap map;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    public final ObservableBoolean userLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
+    public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
+    public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
 
-    public void handleFacebookToken( AccessToken accessToken ) {
+    public void registerUserWithFacebookToken( AccessToken accessToken ) {
 
-        Log.d( TAG, "handleFacebookToken: " + accessToken.getToken() );
+        Log.d( TAG, "registerUserWithFacebookToken: " + accessToken.getToken() );
 
         AuthCredential credential = FacebookAuthProvider.getCredential( accessToken.getToken() );
 
@@ -68,7 +69,7 @@ public class MapActivityViewModel extends ViewModel {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d( TAG, "signInWithCredential:success" );
 
-                            userLoggedIn.set( true );
+                            isUserLoggedIn.set( true );
                         }
                         else {
                             // If sign in fails, display a message to the user.
@@ -100,13 +101,14 @@ public class MapActivityViewModel extends ViewModel {
 
         marker.setTag( info );
 
+        markers.add( marker );
 
         return marker;
     }
 
     public void filterMarkers( PLANT_TYPE plantType ) {
 
-        if( currentFilter.equals( plantType ) ) {
+        if( currentFilter != null  &&  currentFilter.equals( plantType ) ) {
             for( Marker m : markers ) {
                 m.setVisible( true );
             }

@@ -4,13 +4,11 @@ package com.example.bugra.mapzz.ui.map;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bugra.mapzz.R;
+import com.example.bugra.mapzz.BR;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
 import com.example.bugra.mapzz.ui.PlantActivity;
 import com.facebook.CallbackManager;
@@ -28,10 +26,8 @@ import com.google.android.gms.maps.model.Marker;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
-    private static final String TAG = MapActivity.class.getSimpleName();
+    private static final String TAG = "MapActivity";
 
-    private LinearLayout legend;
-    private TextView legend2;
     LoginButton loginButton;
     CallbackManager callbackManager;
     MapActivityViewModel viewModel;
@@ -49,9 +45,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         viewModel = ViewModelProviders.of( this ).get( MapActivityViewModel.class );
 
+        mViewDataBinding.setVariable( BR.viewModel, viewModel );
 
-        legend = (LinearLayout) findViewById( R.id.legendlayout );
-        legend2 = (TextView) findViewById( R.id.legend2layout );
+
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -68,7 +64,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             public void onSuccess( LoginResult loginResult ) {
                 // changeName(findViewById(R.id.profile_name_text),loginResult);
 
-                viewModel.handleFacebookToken( loginResult.getAccessToken() );
+                viewModel.registerUserWithFacebookToken( loginResult.getAccessToken() );
 
                 Toast.makeText( MapActivity.this, "success", Toast.LENGTH_SHORT ).show();
             }
@@ -84,7 +80,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         } );
 
-        legend2.setOnClickListener( new View.OnClickListener() {
+        findViewById( R.id.marker_details ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
                 Intent i = new Intent( MapActivity.this, PlantActivity.class );
@@ -109,8 +105,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         googleMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick( Marker marker ) {
-                legend.setVisibility( View.GONE );
-                legend2.setVisibility( View.VISIBLE );
+                viewModel.isMarkerFocused.set( true );
                 return false;
             }
         } );
@@ -118,8 +113,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         googleMap.setOnMapClickListener( new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick( LatLng latLng ) {
-                legend.setVisibility( View.VISIBLE );
-                legend2.setVisibility( View.GONE );
+                viewModel.isMarkerFocused.set( false );
             }
         } );
 
