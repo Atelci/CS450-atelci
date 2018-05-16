@@ -1,11 +1,16 @@
 <resources>
-    <string name="app_name">Mapzz</string>
+
+    <!-- Plantbuddies Facebook App -->
+    <string name="facebook_app_id">616366275377615</string>
+    <string name="fb_login_protocol_scheme">ad1d20799ab14c0e4de3a3a0a3559623</string>
+
+    <!--<string name="facebook_app_id">1681478395307016</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb1681478395307016</string>-->
+
+    <string name="app_name">PLANTBUDDIES</string>
     <string name="title_activity_mapzz">Map</string>
     <string name="cicekler">Çiçekler</string>
     <string name="tarim">Tarım</string>
     <string name="yesil_yaprakli">Yeşil Yapraklı</string>
-    <string name="facebook_app_id">1681478395307016</string>
-    <string name="fb_login_protocol_scheme">fb1681478395307016</string>
     <string name="chat_activity_title">My Chats</string>
-    <string name="app_title">PLANTBUDDIES</string>
 </resources>

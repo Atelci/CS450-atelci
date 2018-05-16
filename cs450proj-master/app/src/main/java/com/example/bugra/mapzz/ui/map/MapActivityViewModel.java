@@ -1,18 +1,30 @@
 package com.example.bugra.mapzz.ui.map;
 
 import android.arch.lifecycle.ViewModel;
+import android.databinding.ObservableBoolean;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.bugra.mapzz.R;
+import com.facebook.AccessToken;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class MapActivityViewModel extends ViewModel {
+
+    static private final String TAG = "MapActivityViewModel";
 
     public enum PLANT_TYPE {
         GREENERY,
@@ -35,8 +47,36 @@ public class MapActivityViewModel extends ViewModel {
     }
 
     private PLANT_TYPE currentFilter;
-    private ArrayList<Marker> markerlist = new ArrayList<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
     private GoogleMap map;
+
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    public final ObservableBoolean userLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
+
+    public void handleFacebookToken( AccessToken accessToken ) {
+
+        Log.d( TAG, "handleFacebookToken: " + accessToken.getToken() );
+
+        AuthCredential credential = FacebookAuthProvider.getCredential( accessToken.getToken() );
+
+        auth.signInWithCredential( credential )
+                .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete( @NonNull Task<AuthResult> task ) {
+
+                        if( task.isSuccessful() ) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d( TAG, "signInWithCredential:success" );
+
+                            userLoggedIn.set( true );
+                        }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w( TAG, "signInWithCredential:failure", task.getException() );
+                        }
+                    }
+                } );
+    }
 
     public void setMap( GoogleMap map ) {
         this.map = map;
@@ -67,14 +107,14 @@ public class MapActivityViewModel extends ViewModel {
     public void filterMarkers( PLANT_TYPE plantType ) {
 
         if( currentFilter.equals( plantType ) ) {
-            for( Marker m : markerlist ) {
+            for( Marker m : markers ) {
                 m.setVisible( true );
             }
             currentFilter = null;
         }
         else {
-            for( Marker m : markerlist ) {
-                if( ! m.getTitle().equals( plantType.toString() ) ) {
+            for( Marker m : markers ) {
+                if( !m.getTitle().equals( plantType.toString() ) ) {
                     m.setVisible( false );
                 }
                 else {

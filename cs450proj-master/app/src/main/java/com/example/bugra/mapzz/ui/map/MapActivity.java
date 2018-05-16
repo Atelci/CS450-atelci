@@ -4,6 +4,7 @@ package com.example.bugra.mapzz.ui.map;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,11 +12,10 @@ import android.widget.Toast;
 
 import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
-import com.example.bugra.mapzz.ui.plantActivity;
+import com.example.bugra.mapzz.ui.PlantActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +49,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         viewModel = ViewModelProviders.of( this ).get( MapActivityViewModel.class );
 
-        FacebookSdk.sdkInitialize( getApplicationContext() );
 
         legend = (LinearLayout) findViewById( R.id.legendlayout );
         legend2 = (TextView) findViewById( R.id.legend2layout );
@@ -62,16 +61,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         loginButton = findViewById( R.id.fblogin );
         callbackManager = CallbackManager.Factory.create();
 
+
         loginButton.registerCallback( callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess( LoginResult loginResult ) {
                 // changeName(findViewById(R.id.profile_name_text),loginResult);
 
-                findViewById( R.id.map_messages_button ).setVisibility( View.VISIBLE );
-                findViewById( R.id.map_profile_button ).setVisibility( View.VISIBLE );
-
-                loginButton.setVisibility( View.INVISIBLE );
+                viewModel.handleFacebookToken( loginResult.getAccessToken() );
 
                 Toast.makeText( MapActivity.this, "success", Toast.LENGTH_SHORT ).show();
             }
@@ -79,20 +76,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onCancel() {
                 Toast.makeText( MapActivity.this, "cancel", Toast.LENGTH_SHORT ).show();
-
             }
 
             @Override
             public void onError( FacebookException error ) {
                 Toast.makeText( MapActivity.this, "error", Toast.LENGTH_SHORT ).show();
-
             }
         } );
 
         legend2.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
-                Intent i = new Intent( MapActivity.this, plantActivity.class );
+                Intent i = new Intent( MapActivity.this, PlantActivity.class );
                 startActivity( i );
                 overridePendingTransition( R.anim.up1, R.anim.up2 );
             }
@@ -133,6 +128,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         viewModel.setupMap();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
 
 

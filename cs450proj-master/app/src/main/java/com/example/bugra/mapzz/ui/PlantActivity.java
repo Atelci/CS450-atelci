@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.bugra.mapzz.R;
 
-public class plantActivity extends AppCompatActivity {
+public class PlantActivity extends AppCompatActivity {
     private TextView profiltext;
 
     @Override
@@ -21,7 +21,7 @@ public class plantActivity extends AppCompatActivity {
         profiltext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(plantActivity.this, layout.class);
+                Intent i = new Intent(PlantActivity.this, layout.class);
                 startActivity(i);
             }
         });

@@ -59,7 +59,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.plantActivity"
+            android:name=".ui.PlantActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
