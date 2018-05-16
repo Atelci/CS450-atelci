@@ -90,34 +90,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady( GoogleMap googleMap ) {
 
-        //  Configure Google Map
-        googleMap.getUiSettings().setZoomControlsEnabled( true );
-        googleMap.setMinZoomPreference( 11 );
-
-        googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle( this, R.raw.style_json ) );
-
-        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap( this );
-        googleMap.setInfoWindowAdapter( customInfoWindow );
-
-        //  Set click listeners
-        googleMap.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick( Marker marker ) {
-                viewModel.isMarkerFocused.set( true );
-                return false;
-            }
-        } );
-
-        googleMap.setOnMapClickListener( new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick( LatLng latLng ) {
-                viewModel.isMarkerFocused.set( false );
-            }
-        } );
-
-        //  Setup Google Map
-        viewModel.setMap( googleMap );
-        viewModel.setupMap();
+        viewModel.setupMap( googleMap, this );
     }
 
     @Override

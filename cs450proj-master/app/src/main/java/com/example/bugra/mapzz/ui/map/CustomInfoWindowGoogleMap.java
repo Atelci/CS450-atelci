@@ -1,3 +1,4 @@
+/*
 package com.example.bugra.mapzz.ui.map;
 
 import android.content.Context;
@@ -57,4 +58,4 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
     public View getInfoContents(Marker marker) {
         return null;
     }
-}
+}*/

@@ -1,7 +1,11 @@
 package com.example.bugra.mapzz.ui.map;
 
-import android.arch.lifecycle.ViewModel;
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class MapActivityViewModel extends ViewModel {
+public class MapActivityViewModel extends AndroidViewModel {
 
     static private final String TAG = "MapActivityViewModel";
 
@@ -36,6 +41,10 @@ public class MapActivityViewModel extends ViewModel {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
     public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
+
+    public MapActivityViewModel( @NonNull Application application ) {
+        super( application );
+    }
 
     public void registerUserWithFacebookToken( AccessToken accessToken ) {
 
@@ -62,41 +71,39 @@ public class MapActivityViewModel extends ViewModel {
                 } );
     }
 
-    public void setMap( GoogleMap map ) {
-        this.map = map;
-    }
+    private Bitmap getMarkerIcon( Plant.TYPE type ) {
 
-    static private int getMarkerIcon( Plant.TYPE type ) {
+        int resourceId = 0;
 
         switch( type ) {
             case GREENERY:
-                return R.drawable.yesilmark;
+                resourceId = R.drawable.greenery; break;
             case FARMING:
-                return R.drawable.turuncumark;
-            case FLOWERS:
-                return R.drawable.mormark;
-            default:
-                return 0;
+                resourceId = R.drawable.farming; break;
+            case FLOWER:
+                resourceId = R.drawable.flower; break;
         }
+
+        BitmapDrawable drawable = (BitmapDrawable) getApplication().getResources().getDrawable( resourceId );
+        Bitmap bitmap = drawable.getBitmap();
+
+        return Bitmap.createScaledBitmap(
+                bitmap,
+                bitmap.getWidth() / 3,
+                bitmap.getHeight() / 3,
+                false
+        );
     }
 
     public Marker addMarker( LatLng latLng, Plant.TYPE plantType ) {
 
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position( latLng )
-                .title( plantType.toString() )
-                .icon( BitmapDescriptorFactory.fromResource( getMarkerIcon( plantType ) ) );
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position( latLng )
+                .icon( BitmapDescriptorFactory.fromBitmap( getMarkerIcon( plantType ) ) );
 
         Marker marker = map.addMarker( markerOptions );
 
-
-        InfoWindowData info = new InfoWindowData();
-        info.setPlant( "Plant: Persley" );
-        info.setHouseInfo( "House Information: Balcony" );
-        info.setSuccess( "Success: ***" );
-        info.setRating( 1 );
-
-        marker.setTag( info );
+        marker.setTag( plantType.toString() );
 
         markers.add( marker );
 
@@ -113,7 +120,7 @@ public class MapActivityViewModel extends ViewModel {
         }
         else {
             for( Marker m : markers ) {
-                if( !m.getTitle().equals( plantType.toString() ) ) {
+                if( !m.getTag().equals( plantType.toString() ) ) {
                     m.setVisible( false );
                 }
                 else {
@@ -124,14 +131,40 @@ public class MapActivityViewModel extends ViewModel {
         }
     }
 
-    public void setupMap() {
+    public void setupMap( GoogleMap freshMap, Context context ) {
 
+        map = freshMap;
+
+        //  Configure Google Map
+        map.getUiSettings().setZoomControlsEnabled( true );
+        map.setMinZoomPreference( 11 );
+        map.setMapStyle( MapStyleOptions.loadRawResourceStyle( context, R.raw.style_json ) );
+
+        //  Set click listeners
+        map.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick( Marker marker ) {
+                isMarkerFocused.set( true );
+                return false;
+            }
+        } );
+
+        map.setOnMapClickListener( new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick( LatLng latLng ) {
+                isMarkerFocused.set( false );
+            }
+        } );
+
+
+        //  Fill with random markers
         for( int i=0; i<24; i++ ) {
 
             Plant plant = repository.getRandomPlant();
             addMarker( new LatLng( plant.getLat(), plant.getLng() ), plant.getType() );
         }
 
-        map.moveCamera( CameraUpdateFactory.newLatLng( new LatLng( 41.015137, 28.979530 ) ) );
+        //  Move where the markers are generated
+        map.moveCamera( CameraUpdateFactory.newLatLng( new LatLng( 41.01f, 29.056f ) ) );
     }
 }

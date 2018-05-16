@@ -1,3 +1,4 @@
+/*
 package com.example.bugra.mapzz.ui.map;
 
 
@@ -58,4 +59,4 @@ public class InfoWindowData {
     public void setSuccess(String Success) {
         this.Success = Success;
     }
-}
+}*/

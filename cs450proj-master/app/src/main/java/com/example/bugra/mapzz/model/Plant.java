@@ -5,7 +5,7 @@ public class Plant extends BaseModel {
     public enum TYPE {
         GREENERY,
         FARMING,
-        FLOWERS
+        FLOWER
     }
 
     private float Lat, Lng;

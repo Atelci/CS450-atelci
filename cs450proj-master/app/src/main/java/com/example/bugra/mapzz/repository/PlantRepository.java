@@ -43,7 +43,7 @@ public class PlantRepository {
 
     public Plant getRandomPlant() {
         return new Plant(
-                40.975f + (float)(Math.random()) * 0.07f,
+                40.965f + (float)(Math.random()) * 0.05f,
                 29.026f + (float)(Math.random()) * 0.06f,
                 Plant.TYPE.values()[ (int)(Math.random() * 3) ],
                 (int)(Math.random() * 5),
