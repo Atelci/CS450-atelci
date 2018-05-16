@@ -6,4 +6,5 @@
     <string name="yesil_yaprakli">Yeşil Yapraklı</string>
     <string name="facebook_app_id">1681478395307016</string>
     <string name="fb_login_protocol_scheme">fb1681478395307016</string>
+    <string name="chat_activity_title">My Chats</string>
 </resources>
