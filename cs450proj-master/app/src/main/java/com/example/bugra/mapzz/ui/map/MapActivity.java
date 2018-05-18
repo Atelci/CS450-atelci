@@ -1,16 +1,21 @@
 package com.example.bugra.mapzz.ui.map;
 
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.BR;
-import com.example.bugra.mapzz.ui.common.BaseActivity;
+import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.ui.PlantActivity;
+import com.example.bugra.mapzz.ui.common.BaseActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -19,14 +24,13 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
+
+    private static final int FINE_LOCATION_PERMISSON_REQUEST = 0;
 
     private CallbackManager callbackManager;
     private MapActivityViewModel viewModel;
@@ -91,12 +95,45 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     public void onMapReady( GoogleMap googleMap ) {
 
         viewModel.setupMap( googleMap, this );
+
+        enableMyLocationOnMap();
+    }
+
+    private void enableMyLocationOnMap() {
+
+        if( ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions( this,
+                    new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
+                    FINE_LOCATION_PERMISSON_REQUEST );
+
+
+            viewModel.configureLocation( false );
+        }
+        else {
+            viewModel.configureLocation( true );
+        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onRequestPermissionsResult( int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults ) {
+        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
+
+        switch( requestCode ) {
+            case FINE_LOCATION_PERMISSON_REQUEST:
+                if( grantResults.length > 0 && grantResults[ 0 ] == PackageManager.PERMISSION_GRANTED ) {
+
+                    Log.d( TAG, "onRequestPermissionsResult: Got Location Permission" );
+
+                    enableMyLocationOnMap();
+                }
+        }
+    }
+
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        callbackManager.onActivityResult( requestCode, resultCode, data );
+        super.onActivityResult( requestCode, resultCode, data );
     }
 }
 

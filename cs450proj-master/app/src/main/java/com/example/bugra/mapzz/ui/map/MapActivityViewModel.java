@@ -1,11 +1,13 @@
 package com.example.bugra.mapzz.ui.map;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.model.Plant;
 import com.example.bugra.mapzz.repository.PlantRepository;
 import com.facebook.AccessToken;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -37,6 +40,7 @@ public class MapActivityViewModel extends AndroidViewModel {
     private PlantRepository repository = new PlantRepository();
     private Plant.TYPE currentFilter;
     private GoogleMap map;
+    private FusedLocationProviderClient locationProvider;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
@@ -44,6 +48,8 @@ public class MapActivityViewModel extends AndroidViewModel {
 
     public MapActivityViewModel( @NonNull Application application ) {
         super( application );
+
+        locationProvider = new FusedLocationProviderClient( application );
     }
 
     public void registerUserWithFacebookToken( AccessToken accessToken ) {
@@ -77,11 +83,14 @@ public class MapActivityViewModel extends AndroidViewModel {
 
         switch( type ) {
             case GREENERY:
-                resourceId = R.drawable.greenery; break;
+                resourceId = R.drawable.greenery;
+                break;
             case FARMING:
-                resourceId = R.drawable.farming; break;
+                resourceId = R.drawable.farming;
+                break;
             case FLOWER:
-                resourceId = R.drawable.flower; break;
+                resourceId = R.drawable.flower;
+                break;
         }
 
         BitmapDrawable drawable = (BitmapDrawable) getApplication().getResources().getDrawable( resourceId );
@@ -112,7 +121,7 @@ public class MapActivityViewModel extends AndroidViewModel {
 
     public void filterMarkers( Plant.TYPE plantType ) {
 
-        if( currentFilter != null  &&  currentFilter.equals( plantType ) ) {
+        if( currentFilter != null && currentFilter.equals( plantType ) ) {
             for( Marker m : markers ) {
                 m.setVisible( true );
             }
@@ -158,13 +167,51 @@ public class MapActivityViewModel extends AndroidViewModel {
 
 
         //  Fill with random markers
-        for( int i=0; i<24; i++ ) {
+        for( int i = 0; i < 24; i++ ) {
 
             Plant plant = repository.getRandomPlant();
             addMarker( new LatLng( plant.getLat(), plant.getLng() ), plant.getType() );
         }
+    }
 
-        //  Move where the markers are generated
-        map.moveCamera( CameraUpdateFactory.newLatLng( new LatLng( 41.01f, 29.056f ) ) );
+    @SuppressLint( "MissingPermission" )
+    public void configureLocation( boolean isLocationPermissionGranted ) {
+
+        if( !isLocationPermissionGranted ) {
+
+            map.setMyLocationEnabled( false );
+            map.getUiSettings().setMyLocationButtonEnabled( false );
+
+            map.moveCamera( CameraUpdateFactory.newLatLng( new LatLng( 41.01f, 29.056f ) ) );
+        }
+        else {
+
+            map.setMyLocationEnabled( true );
+            map.getUiSettings().setMyLocationButtonEnabled( true );
+
+            getDeviceLocation();
+        }
+    }
+
+    private void getDeviceLocation() {
+
+        try {
+            Task<Location> locationResult = locationProvider.getLastLocation();
+            locationResult.addOnCompleteListener( new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete( @NonNull Task<Location> task ) {
+                    if( task.isSuccessful() ) {
+
+                        Location location = task.getResult();
+                        map.moveCamera( CameraUpdateFactory.newLatLng(
+                                new LatLng( location.getLatitude(), location.getLongitude() )
+                        ) );
+                    }
+                }
+            } );
+        }
+        catch( SecurityException e ) {
+            Log.e( "Exception: %s", e.getMessage() );
+        }
     }
 }
