@@ -48,6 +48,7 @@ public class MapActivityViewModel extends AndroidViewModel {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
     public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
+    private Marker focusedMarker;
     public final ObservableField<Plant> focusedPlant = new ObservableField<>();
 
     public MapActivityViewModel( @NonNull Application application ) {
@@ -96,6 +97,15 @@ public class MapActivityViewModel extends AndroidViewModel {
             public boolean onMarkerClick( Marker marker ) {
                 isMarkerFocused.set( true );
                 focusedPlant.set( (Plant) marker.getTag() );
+
+                if( focusedMarker != null ) {
+                    dehighlightMarker( focusedMarker );
+                }
+
+                focusedMarker = marker;
+
+                highlightMarker( focusedMarker );
+
                 return false;
             }
         } );
@@ -104,14 +114,26 @@ public class MapActivityViewModel extends AndroidViewModel {
             @Override
             public void onMapClick( LatLng latLng ) {
                 isMarkerFocused.set( false );
+                focusedPlant.set( null );
+
+                dehighlightMarker( focusedMarker );
             }
         } );
-
 
         //  Fill with random markers
         for( int i = 0; i < 24; i++ ) {
             addMarker( repository.getRandomPlant() );
         }
+    }
+
+    private void highlightMarker( Marker marker ) {
+        Bitmap icon = getMarkerIcon( ((Plant) marker.getTag()).getType(), 2 );
+        marker.setIcon( BitmapDescriptorFactory.fromBitmap( icon ) );
+    }
+
+    private void dehighlightMarker( Marker marker ) {
+        Bitmap icon = getMarkerIcon( ((Plant) marker.getTag()).getType(), 3 );
+        marker.setIcon( BitmapDescriptorFactory.fromBitmap( icon ) );
     }
 
     @SuppressLint( "MissingPermission" )
@@ -165,7 +187,7 @@ public class MapActivityViewModel extends AndroidViewModel {
         }
     }
 
-    private Bitmap getMarkerIcon( Plant.TYPE type ) {
+    private Bitmap getMarkerIcon( Plant.TYPE type, int factor ) {
 
         int resourceId = 0;
 
@@ -186,8 +208,8 @@ public class MapActivityViewModel extends AndroidViewModel {
 
         return Bitmap.createScaledBitmap(
                 bitmap,
-                bitmap.getWidth() / 3,
-                bitmap.getHeight() / 3,
+                bitmap.getWidth() / factor,
+                bitmap.getHeight() / factor,
                 false
         );
     }
@@ -196,7 +218,7 @@ public class MapActivityViewModel extends AndroidViewModel {
 
         MarkerOptions markerOptions = new MarkerOptions()
                 .position( new LatLng( plant.getLat(), plant.getLng() ) )
-                .icon( BitmapDescriptorFactory.fromBitmap( getMarkerIcon( plant.getType() ) ) );
+                .icon( BitmapDescriptorFactory.fromBitmap( getMarkerIcon( plant.getType(), 3 ) ) );
 
         Marker marker = map.addMarker( markerOptions );
 

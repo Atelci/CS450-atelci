@@ -9,7 +9,7 @@ public class Plant extends BaseModel {
 
         private final String string;
 
-        private TYPE( int id ) {
+        TYPE( int id ) {
             switch( id ) {
                 case 0:
                     string = "Yeşil Yapraklı";
