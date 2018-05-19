@@ -1,11 +1,13 @@
 package com.example.bugra.mapzz.model;
 
+import com.example.bugra.mapzz.R;
+
 public class Plant extends BaseModel {
 
     public enum TYPE {
-        GREENERY(0),
-        FARMING(1),
-        FLOWER(2);
+        GREENERY( 0 ),
+        FARMING( 1 ),
+        FLOWER( 2 );
 
         private final String string;
 
@@ -29,6 +31,20 @@ public class Plant extends BaseModel {
         public String toString() {
             return string;
         }
+
+        public int getColorId() {
+
+            switch( this ) {
+                case GREENERY:
+                    return R.color.greenery;
+                case FARMING:
+                    return R.color.farming;
+                case FLOWER:
+                    return R.color.flower;
+                default:
+                    return R.color.black;
+            }
+        }
     }
 
     private float lat, lng;
@@ -37,7 +53,8 @@ public class Plant extends BaseModel {
     private int success;
     private String ownerId;
 
-    public Plant() {}
+    public Plant() {
+    }
 
     public Plant( float lat, float lng, TYPE type, String plantName, int success, String ownerId ) {
         this.lat = lat;
