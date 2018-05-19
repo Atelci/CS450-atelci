@@ -2,11 +2,13 @@ package com.example.bugra.mapzz.ui.map;
 
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.bugra.mapzz.BR;
 import com.example.bugra.mapzz.R;
+import com.example.bugra.mapzz.model.Plant;
 import com.example.bugra.mapzz.ui.PlantActivity;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
 import com.facebook.CallbackManager;
@@ -25,17 +28,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.util.ArrayList;
+
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final String TAG = "MapActivity";
 
-    private static final int FINE_LOCATION_PERMISSON_REQUEST = 0;
+    private static final int FINE_LOCATION_PERMISSION_REQUEST = 0;
 
     private CallbackManager callbackManager;
     private MapActivityViewModel viewModel;
-
-    //GPSTracker gps = new GPSTracker(this);
 
     @Override
     protected int getLayoutId() {
@@ -48,6 +51,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         viewModel = ViewModelProviders.of( this ).get( MapActivityViewModel.class );
         mViewDataBinding.setVariable( BR.viewModel, viewModel );
+
+        viewModel.plants.observe( this, new Observer<ArrayList<Plant>>() {
+            @Override
+            public void onChanged( @Nullable ArrayList<Plant> newPlants ) {
+//                TODO: Enable this when the database is ready
+//                viewModel.updateMarkers( newPlants );
+            }
+        } );
 
         //  Get Google Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -105,7 +116,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
             ActivityCompat.requestPermissions( this,
                     new String[]{ Manifest.permission.ACCESS_FINE_LOCATION },
-                    FINE_LOCATION_PERMISSON_REQUEST );
+                    FINE_LOCATION_PERMISSION_REQUEST );
 
 
             viewModel.configureLocation( false );
@@ -120,7 +131,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         super.onRequestPermissionsResult( requestCode, permissions, grantResults );
 
         switch( requestCode ) {
-            case FINE_LOCATION_PERMISSON_REQUEST:
+            case FINE_LOCATION_PERMISSION_REQUEST:
                 if( grantResults.length > 0 && grantResults[ 0 ] == PackageManager.PERMISSION_GRANTED ) {
 
                     Log.d( TAG, "onRequestPermissionsResult: Got Location Permission" );

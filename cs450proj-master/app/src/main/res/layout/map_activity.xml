@@ -109,7 +109,8 @@
                 android:visibility="@{ viewModel.isMarkerFocused ? View.GONE : View.VISIBLE }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="gone">
 
 
                 <LinearLayout
@@ -189,21 +190,79 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:id="@+id/marker_details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:padding="@dimen/unit"
                 android:visibility="@{ viewModel.isMarkerFocused ? View.VISIBLE : View.GONE }">
 
                 <TextView
-                    style="@style/textstyle"
+                    android:id="@+id/marker_plant_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.focusedPlant.plantName}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Plant Name" />
+
+                <TextView
+                    android:id="@+id/marker_plant_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.focusedPlant.type.toString()}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintStart_toStartOf="@+id/marker_plant_name"
+                    app:layout_constraintTop_toBottomOf="@+id/marker_plant_name"
+                    tools:text="Plant Type" />
+
+                <RatingBar
+                    android:id="@+id/marker_plant_rating_bar"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:numStars="5"
+                    android:rating="@{viewModel.focusedPlant.success}"
+                    app:layout_constraintBottom_toTopOf="@+id/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/divider"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/gray"
-                    android:gravity="center"
-                    android:text="Menekşe" />
-            </LinearLayout>
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/common_google_signin_btn_text_light_pressed"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/marker_plant_type" />
+
+                <TextView
+                    android:id="@+id/marker_plant_more_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Daha Fazla Bilgi"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                <ImageView
+                    android:id="@+id/marker_plant_more_info_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/info"
+                    app:layout_constraintBottom_toBottomOf="@+id/marker_plant_more_info"
+                    app:layout_constraintStart_toEndOf="@+id/marker_plant_more_info"
+                    app:layout_constraintTop_toTopOf="@+id/marker_plant_more_info" />
+            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 

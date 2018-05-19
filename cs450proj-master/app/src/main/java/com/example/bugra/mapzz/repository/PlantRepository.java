@@ -41,12 +41,24 @@ public class PlantRepository {
         } );
     }
 
+    static private final String[] plantNames = new String[]{
+            "Sarmaşık", "Fesleğen", "Biberiye",
+            "Çilek",    "Biber",    "Havuç",
+            "Menekşe",  "Zambak",   "Manolya"
+    };
+
     public Plant getRandomPlant() {
+
+        int type = (int) (Math.random() * 3);
+        int plantName = type * 3 + (int) (Math.random() * 3);
+        int rating = (int) (Math.random() * 5) + 1;
+
         return new Plant(
-                40.965f + (float)(Math.random()) * 0.05f,
-                29.026f + (float)(Math.random()) * 0.06f,
-                Plant.TYPE.values()[ (int)(Math.random() * 3) ],
-                (int)(Math.random() * 5),
+                40.965f + (float) (Math.random()) * 0.05f,
+                29.026f + (float) (Math.random()) * 0.06f,
+                Plant.TYPE.values()[ type ],
+                plantNames[ plantName ],
+                rating,
                 ""
         );
     }

@@ -3,8 +3,10 @@ package com.example.bugra.mapzz.ui.map;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -37,19 +39,21 @@ public class MapActivityViewModel extends AndroidViewModel {
     static private final String TAG = "MapActivityViewModel";
 
     private ArrayList<Marker> markers = new ArrayList<>();
+    MutableLiveData<ArrayList<Plant>> plants = new MutableLiveData<>();
     private PlantRepository repository = new PlantRepository();
     private Plant.TYPE currentFilter;
     private GoogleMap map;
-    private FusedLocationProviderClient locationProvider;
+    private final FusedLocationProviderClient locationProvider = new FusedLocationProviderClient( getApplication() );
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
     public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
+    public final ObservableField<Plant> focusedPlant = new ObservableField<>();
 
     public MapActivityViewModel( @NonNull Application application ) {
         super( application );
 
-        locationProvider = new FusedLocationProviderClient( application );
+        repository.getPlants( plants );
     }
 
     public void registerUserWithFacebookToken( AccessToken accessToken ) {
@@ -77,69 +81,6 @@ public class MapActivityViewModel extends AndroidViewModel {
                 } );
     }
 
-    private Bitmap getMarkerIcon( Plant.TYPE type ) {
-
-        int resourceId = 0;
-
-        switch( type ) {
-            case GREENERY:
-                resourceId = R.drawable.greenery;
-                break;
-            case FARMING:
-                resourceId = R.drawable.farming;
-                break;
-            case FLOWER:
-                resourceId = R.drawable.flower;
-                break;
-        }
-
-        BitmapDrawable drawable = (BitmapDrawable) getApplication().getResources().getDrawable( resourceId );
-        Bitmap bitmap = drawable.getBitmap();
-
-        return Bitmap.createScaledBitmap(
-                bitmap,
-                bitmap.getWidth() / 3,
-                bitmap.getHeight() / 3,
-                false
-        );
-    }
-
-    public Marker addMarker( LatLng latLng, Plant.TYPE plantType ) {
-
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position( latLng )
-                .icon( BitmapDescriptorFactory.fromBitmap( getMarkerIcon( plantType ) ) );
-
-        Marker marker = map.addMarker( markerOptions );
-
-        marker.setTag( plantType.toString() );
-
-        markers.add( marker );
-
-        return marker;
-    }
-
-    public void filterMarkers( Plant.TYPE plantType ) {
-
-        if( currentFilter != null && currentFilter.equals( plantType ) ) {
-            for( Marker m : markers ) {
-                m.setVisible( true );
-            }
-            currentFilter = null;
-        }
-        else {
-            for( Marker m : markers ) {
-                if( !m.getTag().equals( plantType.toString() ) ) {
-                    m.setVisible( false );
-                }
-                else {
-                    m.setVisible( true );
-                }
-            }
-            currentFilter = plantType;
-        }
-    }
-
     public void setupMap( GoogleMap freshMap, Context context ) {
 
         map = freshMap;
@@ -147,13 +88,14 @@ public class MapActivityViewModel extends AndroidViewModel {
         //  Configure Google Map
         map.getUiSettings().setZoomControlsEnabled( true );
         map.setMinZoomPreference( 11 );
-        map.setMapStyle( MapStyleOptions.loadRawResourceStyle( context, R.raw.style_json ) );
+        map.setMapStyle( MapStyleOptions.loadRawResourceStyle( getApplication(), R.raw.style_json ) );
 
         //  Set click listeners
         map.setOnMarkerClickListener( new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick( Marker marker ) {
                 isMarkerFocused.set( true );
+                focusedPlant.set( (Plant) marker.getTag() );
                 return false;
             }
         } );
@@ -168,9 +110,7 @@ public class MapActivityViewModel extends AndroidViewModel {
 
         //  Fill with random markers
         for( int i = 0; i < 24; i++ ) {
-
-            Plant plant = repository.getRandomPlant();
-            addMarker( new LatLng( plant.getLat(), plant.getLng() ), plant.getType() );
+            addMarker( repository.getRandomPlant() );
         }
     }
 
@@ -209,9 +149,82 @@ public class MapActivityViewModel extends AndroidViewModel {
                     }
                 }
             } );
-        }
-        catch( SecurityException e ) {
+        } catch( SecurityException e ) {
             Log.e( "Exception: %s", e.getMessage() );
+        }
+    }
+
+    void updateMarkers( ArrayList<Plant> newPlants ) {
+
+        for( Marker marker : markers ) {
+            marker.remove();
+        }
+
+        for( Plant plant : newPlants ) {
+            addMarker( plant );
+        }
+    }
+
+    private Bitmap getMarkerIcon( Plant.TYPE type ) {
+
+        int resourceId = 0;
+
+        switch( type ) {
+            case GREENERY:
+                resourceId = R.drawable.greenery;
+                break;
+            case FARMING:
+                resourceId = R.drawable.farming;
+                break;
+            case FLOWER:
+                resourceId = R.drawable.flower;
+                break;
+        }
+
+        BitmapDrawable drawable = (BitmapDrawable) getApplication().getResources().getDrawable( resourceId );
+        Bitmap bitmap = drawable.getBitmap();
+
+        return Bitmap.createScaledBitmap(
+                bitmap,
+                bitmap.getWidth() / 3,
+                bitmap.getHeight() / 3,
+                false
+        );
+    }
+
+    public Marker addMarker( Plant plant ) {
+
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position( new LatLng( plant.getLat(), plant.getLng() ) )
+                .icon( BitmapDescriptorFactory.fromBitmap( getMarkerIcon( plant.getType() ) ) );
+
+        Marker marker = map.addMarker( markerOptions );
+
+        marker.setTag( plant );
+
+        markers.add( marker );
+
+        return marker;
+    }
+
+    public void filterMarkers( Plant.TYPE plantType ) {
+
+        if( currentFilter != null && currentFilter.equals( plantType ) ) {
+            for( Marker m : markers ) {
+                m.setVisible( true );
+            }
+            currentFilter = null;
+        }
+        else {
+            for( Marker m : markers ) {
+                if( ((Plant) m.getTag()).getType().equals( plantType ) ) {
+                    m.setVisible( true );
+                }
+                else {
+                    m.setVisible( false );
+                }
+            }
+            currentFilter = plantType;
         }
     }
 }
