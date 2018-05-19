@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "46436614257",
+    "firebase_url": "https://flat-farmers.firebaseio.com",
+    "project_id": "flat-farmers",
+    "storage_bucket": "flat-farmers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46436614257:android:afa1b7a6fd47c8ee",
+        "android_client_info": {
+          "package_name": "com.example.bugra.mapzz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46436614257-bo47ea9utl1109jqp5bmbv557rqoriqn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bugra.mapzz",
+            "certificate_hash": "9b01c9e8846a65bfbea529974181060e119b3a9b"
+          }
+        },
+        {
+          "client_id": "46436614257-lnvgb2titbisu52gn6um5un6gd4g0qe6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAilG7dm5Zb9Sdj1ZP2_f13wF4Q_wpCsAE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46436614257-lnvgb2titbisu52gn6um5un6gd4g0qe6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
