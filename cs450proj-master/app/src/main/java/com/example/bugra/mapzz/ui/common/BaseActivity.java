@@ -22,5 +22,6 @@ public abstract class BaseActivity extends FragmentActivity {
         mViewDataBinding = DataBindingUtil.setContentView( this, getLayoutId() );
 
         Log.d( TAG, "Created -> " + getResources().getResourceName( getLayoutId() ) );
+        Log.d( TAG, "Activity " + (mViewDataBinding == null ? "doesn't" : "does" ) + " have a data binding." );
     }
 }

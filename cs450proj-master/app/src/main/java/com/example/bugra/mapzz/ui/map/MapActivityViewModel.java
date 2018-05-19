@@ -127,7 +127,7 @@ public class MapActivityViewModel extends AndroidViewModel {
     }
 
     private void highlightMarker( Marker marker ) {
-        Bitmap icon = getMarkerIcon( ((Plant) marker.getTag()).getType(), 2 );
+        Bitmap icon = getMarkerIcon( ((Plant) marker.getTag()).getType(), 1 );
         marker.setIcon( BitmapDescriptorFactory.fromBitmap( icon ) );
     }
 

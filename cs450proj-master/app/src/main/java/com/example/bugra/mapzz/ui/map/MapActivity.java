@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.bugra.mapzz.BR;
 import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.model.Plant;
-import com.example.bugra.mapzz.ui.PlantActivity;
+import com.example.bugra.mapzz.ui.plant.PlantActivity;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -95,8 +95,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById( R.id.marker_details ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
-                Intent i = new Intent( MapActivity.this, PlantActivity.class );
-                startActivity( i );
+                Intent intent = new Intent( MapActivity.this, PlantActivity.class );
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable( "plant", viewModel.focusedPlant.get() );
+                intent.putExtras( bundle );
+
+                startActivity( intent );
                 overridePendingTransition( R.anim.up1, R.anim.up2 );
             }
         } );
