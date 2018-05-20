@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/plant_profile_card"
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
@@ -76,7 +76,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/plant_profile_picture"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Nkeskin" />
+                    android:text="@{viewModel.user.displayName}"
+                    tools:text="User's Name" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.CardView>
@@ -86,10 +87,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:text="Balkonlu"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintStart_toEndOf="@+id/plant_home_info_text"
-            app:layout_constraintTop_toTopOf="@+id/plant_home_info_text"
-            tools:text="Balkonlu" />
+            app:layout_constraintTop_toTopOf="@+id/plant_home_info_text" />
 
         <View
             android:id="@+id/divider2"
@@ -113,7 +114,7 @@
             android:text="@{viewModel.plant.plantName}"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/plant_profile_card"
             tools:text="Plant Name" />
 
         <TextView
@@ -137,7 +138,7 @@
             android:rating="@{viewModel.plant.success}"
             app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/plant_profile_card"
             tools:rating="3" />
 
     </android.support.constraint.ConstraintLayout>

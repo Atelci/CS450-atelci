@@ -33,7 +33,7 @@ public class PlantActivity extends BaseActivity {
         viewModel.plant = (Plant) getIntent().getExtras().getSerializable( "plant" );
 
 
-        findViewById( R.id.plant_profile_name ).setOnClickListener( new View.OnClickListener() {
+        findViewById( R.id.plant_profile_card ).setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
                 Intent intent = new Intent( PlantActivity.this, ProfileActivity.class );
