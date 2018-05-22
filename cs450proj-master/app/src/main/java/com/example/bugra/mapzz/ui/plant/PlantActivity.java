@@ -32,13 +32,15 @@ public class PlantActivity extends BaseActivity {
 
         viewModel.plant = (Plant) getIntent().getExtras().getSerializable( "plant" );
 
-
-        findViewById( R.id.plant_profile_card ).setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick( View view ) {
-                Intent intent = new Intent( PlantActivity.this, ProfileActivity.class );
-                startActivity( intent );
-            }
-        } );
+        findViewById( R.id.plant_profile_card ).setOnClickListener( profileClickListener );
     }
+
+    private final View.OnClickListener profileClickListener =  new View.OnClickListener() {
+        @Override
+        public void onClick( View view ) {
+            Intent intent = new Intent( PlantActivity.this, ProfileActivity.class );
+            intent.putExtra( "userId", viewModel.user.getUserId() );
+            startActivity( intent );
+        }
+    } ;
 }

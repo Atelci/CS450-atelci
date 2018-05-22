@@ -49,7 +49,7 @@
         </activity>
         <activity
             android:name=".ui.map.MapActivity"
-            android:label="@string/title_activity_mapzz"></activity>
+            android:label="@string/title_activity_mapzz" />
         <activity android:name=".ui.profile.ProfileActivity" />
         <activity android:name=".ui.plant.PlantActivity" />
 
@@ -79,7 +79,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.chat.ChatActivity" />
-        <activity android:name=".random"></activity>
     </application>
 
 </manifest>

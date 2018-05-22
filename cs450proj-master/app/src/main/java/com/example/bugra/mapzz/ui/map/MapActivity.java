@@ -21,6 +21,7 @@ import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.model.Plant;
 import com.example.bugra.mapzz.ui.plant.PlantActivity;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
+import com.example.bugra.mapzz.ui.profile.ProfileActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -93,20 +94,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         } );
 
-
-        findViewById( R.id.marker_details ).setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick( View view ) {
-                Intent intent = new Intent( MapActivity.this, PlantActivity.class );
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable( "plant", viewModel.focusedPlant.get() );
-                intent.putExtras( bundle );
-
-                startActivity( intent );
-                overridePendingTransition( R.anim.up1, R.anim.up2 );
-            }
-        } );
+        //  Set click listeners
+        findViewById( R.id.marker_details ).setOnClickListener( markerDetailsClickListener );
+        findViewById( R.id.map_profile_button ).setOnClickListener( profileButtonClickListener );
     }
 
     @Override
@@ -153,6 +143,33 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         callbackManager.onActivityResult( requestCode, resultCode, data );
         super.onActivityResult( requestCode, resultCode, data );
     }
+
+    private final View.OnClickListener markerDetailsClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick( View view ) {
+            Intent intent = new Intent( MapActivity.this, PlantActivity.class );
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable( "plant", viewModel.focusedPlant.get() );
+            intent.putExtras( bundle );
+
+            startActivity( intent );
+            overridePendingTransition( R.anim.up1, R.anim.up2 );
+        }
+    };
+
+    private View.OnClickListener profileButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick( View view ) {
+            Intent intent = new Intent( MapActivity.this, ProfileActivity.class );
+
+            //  Empty string indicates to show the auth user's profile
+            intent.putExtra( "userId", "" );
+
+            startActivity( intent );
+            overridePendingTransition( R.anim.up1, R.anim.up2 );
+        }
+    };
 }
 
 

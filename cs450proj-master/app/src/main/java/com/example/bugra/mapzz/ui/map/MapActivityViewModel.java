@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ public class MapActivityViewModel extends AndroidViewModel {
     private final FusedLocationProviderClient locationProvider = new FusedLocationProviderClient( getApplication() );
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    public FirebaseUser auth_user;
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
     public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
     private Marker focusedMarker;
@@ -73,6 +75,7 @@ public class MapActivityViewModel extends AndroidViewModel {
                             Log.d( TAG, "signInWithCredential:success" );
 
                             isUserLoggedIn.set( true );
+                            auth_user = task.getResult().getUser();
                         }
                         else {
                             // If sign in fails, display a message to the user.
