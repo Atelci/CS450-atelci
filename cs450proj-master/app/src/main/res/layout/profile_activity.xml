@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,32 +16,19 @@
         android:background="@color/gray"
         android:padding="@dimen/unit">
 
-        <ImageButton
-            android:id="@+id/profile_options_button"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="24dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/profile_edit_button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true"
             android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#55ffa4a4"
-            android:padding="@dimen/unit"
-            android:text="Çıkış Yap"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:backgroundTint="@android:color/white"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/profile_picture"
@@ -54,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:profilePhotoUrl="@{viewModel.user.photoUrl}"/>
+            app:profilePhotoUrl="@{viewModel.user.photoUrl}" />
 
         <TextView
             android:id="@+id/profile_display_name"
@@ -63,23 +50,24 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:text="@{viewModel.user.displayName}"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_picture"
-            android:text="@{viewModel.user.displayName}"
             tools:text="User Display Name" />
 
         <TextView
             android:id="@+id/profile_bio"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:background="@drawable/border"
             android:ellipsize="end"
-            android:maxLines="5"
-            android:maxWidth="300dp"
+            android:maxLength="500"
             android:minLines="1"
+            android:padding="@dimen/unit"
             android:text="@{ viewModel.user.bio ?? @string/no_bio }"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@{ viewModel.user.bio == null ? @android:color/darker_gray : null }"
@@ -87,16 +75,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_display_name"
             tools:text="User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBioUser Bio User Bio UserBio User Bio User Bio UserBio" />
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/divider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
 
     </android.support.constraint.ConstraintLayout>
 

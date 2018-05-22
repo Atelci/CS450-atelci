@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#333333</color>
 
     <color name="greenery">#7BAC5B</color>
     <color name="farming">#ED6214</color>

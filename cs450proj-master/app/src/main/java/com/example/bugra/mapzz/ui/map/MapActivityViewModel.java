@@ -48,9 +48,9 @@ public class MapActivityViewModel extends AndroidViewModel {
     private final FusedLocationProviderClient locationProvider = new FusedLocationProviderClient( getApplication() );
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    public User auth_user;
-    public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
-    public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
+    public final ObservableField<User> authUser = new ObservableField<>();
+    public final ObservableBoolean isUserLoggedIn = new ObservableBoolean();
+    public final ObservableBoolean isMarkerFocused = new ObservableBoolean();
     private Marker focusedMarker;
     public final ObservableField<Plant> focusedPlant = new ObservableField<>();
 
@@ -58,6 +58,17 @@ public class MapActivityViewModel extends AndroidViewModel {
         super( application );
 
         repository.getPlants( plants );
+
+        isMarkerFocused.set( false );
+
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+
+        isUserLoggedIn.set( firebaseUser != null );
+
+        if( firebaseUser != null ) {
+
+            authUser.set( new User( firebaseUser ) );
+        }
     }
 
     public void registerUserWithFacebookToken( AccessToken accessToken ) {
@@ -76,7 +87,7 @@ public class MapActivityViewModel extends AndroidViewModel {
                             Log.d( TAG, "signInWithCredential:success" );
 
                             isUserLoggedIn.set( true );
-                            auth_user = new User( task.getResult().getUser() );
+                            authUser.set( new User( task.getResult().getUser() ) );
                         }
                         else {
                             // If sign in fails, display a message to the user.

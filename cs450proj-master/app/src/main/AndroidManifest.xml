@@ -79,6 +79,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.chat.ChatActivity" />
+        <activity android:name=".ui.profile_settings.ProfileSettingsActivity" />
     </application>
 
 </manifest>
