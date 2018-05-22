@@ -16,6 +16,33 @@
         android:background="@color/gray"
         android:padding="@dimen/unit">
 
+        <ImageButton
+            android:id="@+id/profile_options_button"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/ic_menu_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#55ffa4a4"
+            android:padding="@dimen/unit"
+            android:text="Çıkış Yap"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="100dp"
@@ -43,6 +70,33 @@
             app:layout_constraintTop_toBottomOf="@+id/profile_picture"
             android:text="@{viewModel.user.displayName}"
             tools:text="User Display Name" />
+
+        <TextView
+            android:id="@+id/profile_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:maxWidth="300dp"
+            android:minLines="1"
+            android:text="@{ viewModel.user.bio ?? @string/no_bio }"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@{ viewModel.user.bio == null ? @android:color/darker_gray : null }"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_display_name"
+            tools:text="User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBio User Bio User Bio UserBioUser Bio User Bio UserBio User Bio User Bio UserBio" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_bio" />
 
     </android.support.constraint.ConstraintLayout>
 

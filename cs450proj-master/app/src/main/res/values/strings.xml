@@ -14,4 +14,5 @@
     <string name="tarim">Tarım</string>
     <string name="yesil_yaprakli">Yeşil Yapraklı</string>
     <string name="chat_activity_title">My Chats</string>
+    <string name="no_bio">Kullanıcı açıklaması yok.</string>
 </resources>
