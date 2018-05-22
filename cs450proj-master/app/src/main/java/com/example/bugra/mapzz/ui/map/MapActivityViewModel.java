@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.model.Plant;
+import com.example.bugra.mapzz.model.User;
 import com.example.bugra.mapzz.repository.PlantRepository;
 import com.facebook.AccessToken;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,7 +48,7 @@ public class MapActivityViewModel extends AndroidViewModel {
     private final FusedLocationProviderClient locationProvider = new FusedLocationProviderClient( getApplication() );
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    public FirebaseUser auth_user;
+    public User auth_user;
     public final ObservableBoolean isUserLoggedIn = new ObservableBoolean( auth.getCurrentUser() != null );
     public final ObservableBoolean isMarkerFocused = new ObservableBoolean( false );
     private Marker focusedMarker;
@@ -75,7 +76,7 @@ public class MapActivityViewModel extends AndroidViewModel {
                             Log.d( TAG, "signInWithCredential:success" );
 
                             isUserLoggedIn.set( true );
-                            auth_user = task.getResult().getUser();
+                            auth_user = new User( task.getResult().getUser() );
                         }
                         else {
                             // If sign in fails, display a message to the user.

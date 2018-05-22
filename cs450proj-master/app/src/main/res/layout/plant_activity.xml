@@ -64,7 +64,8 @@
                     android:src="@drawable/profile"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:profilePhotoUrl="@{viewModel.user.photoUrl}"/>
 
                 <TextView
                     android:id="@+id/plant_profile_name"

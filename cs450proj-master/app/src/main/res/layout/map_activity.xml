@@ -65,7 +65,8 @@
                 android:src="@drawable/profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:visibility="@{ viewModel.isUserLoggedIn ? View.VISIBLE : View.GONE }"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                app:profilePhotoUrl="@{viewModel.auth_user.photoUrl}"/>
 
         </android.support.constraint.ConstraintLayout>
 

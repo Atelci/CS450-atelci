@@ -1,5 +1,6 @@
 package com.example.bugra.mapzz.model;
 
+
 import com.google.firebase.auth.FirebaseUser;
 
 public class User extends BaseModel {
@@ -38,11 +39,11 @@ public class User extends BaseModel {
         this.displayName = displayName;
     }
 
-    public String getPictureUrl() {
+    public String getPhotoUrl() {
         return pictureUrl;
     }
 
-    public void setPictureUrl( String pictureUrl ) {
+    public void setPhotoUrl( String pictureUrl ) {
         this.pictureUrl = pictureUrl;
     }
 }
