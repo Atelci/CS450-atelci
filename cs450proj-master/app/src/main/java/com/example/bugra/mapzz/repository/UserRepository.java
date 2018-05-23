@@ -19,10 +19,10 @@ public class UserRepository {
 
     public User getRandomUser() {
         return new User(
-                "",
+                "random",
                 "Random User",
                 "http://lorempixel.com/400/400/people/",
-                "Random User Bio"
+                "Random User BioRandom User BioRandom User Bio"
         );
     }
 }

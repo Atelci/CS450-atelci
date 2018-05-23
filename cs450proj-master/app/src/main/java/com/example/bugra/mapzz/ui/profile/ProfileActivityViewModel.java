@@ -17,7 +17,6 @@ public class ProfileActivityViewModel extends BaseViewModel {
 
     public User user;
     public final ObservableBoolean isMyProfile = new ObservableBoolean( false );
-    private final UserRepository userRepository = new UserRepository();
 
     public void fetchUserData( User user ) {
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.bugra.mapzz.ui.profile.PlantItemViewModel" />
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/unit">
+
+        <TextView
+            android:id="@+id/marker_plant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.plant.plantName}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Plant Name" />
+
+        <TextView
+            android:id="@+id/marker_plant_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.plant.type.toString()}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:layout_constraintStart_toStartOf="@+id/marker_plant_name"
+            app:layout_constraintTop_toBottomOf="@+id/marker_plant_name"
+            tools:text="Plant Type" />
+
+        <RatingBar
+            android:id="@+id/marker_plant_rating_bar"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:numStars="5"
+            android:progressTint="@{viewModel.plant == null ? @color/black : context.getColor( viewModel.plant.getType().getColorId() )}"
+            android:rating="@{viewModel.plant.success}"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/marker_plant_type" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

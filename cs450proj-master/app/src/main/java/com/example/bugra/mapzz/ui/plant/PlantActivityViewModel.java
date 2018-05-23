@@ -18,8 +18,6 @@ public class PlantActivityViewModel extends ViewModel {
 
         this.plant = plant;
 
-        Log.d( "TAG", "fetchPlantData: " + plant.getOwnerId() );
-
         userRepository.getUser( user, plant.getOwnerId() );
     }
 }

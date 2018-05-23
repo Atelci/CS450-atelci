@@ -1,6 +1,7 @@
 package com.example.bugra.mapzz.repository;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
 
 import com.example.bugra.mapzz.model.Plant;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +19,51 @@ public class PlantRepository {
     public void getPlants( MutableLiveData<ArrayList<Plant>> liveData ) {
 
         DatabaseReference ref = database.getReference( "plants" );
+
+        ref.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot ) {
+
+                Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
+
+                ArrayList<Plant> plants = new ArrayList<>();
+
+                for( DataSnapshot snapshot : snapshots ) {
+                    plants.add( snapshot.getValue( Plant.class ) );
+                }
+
+                liveData.setValue( plants );
+            }
+
+            @Override
+            public void onCancelled( DatabaseError databaseError ) {
+
+            }
+        } );
+    }
+
+    public void getPlantsOfUser( MutableLiveData<ArrayList<Plant>> liveData, String userId ) {
+
+        Log.d( "TAG", "getPlantsOfUser: userId => " + userId );
+
+        if( userId.equals( "random" ) ) {
+
+            ArrayList<Plant> plants = new ArrayList<>();
+            int amount = (int) (Math.random() * 4) + 2;
+
+            for( int i=0; i<amount; i++ ) {
+                plants.add( getRandomPlant() );
+            }
+
+            liveData.setValue( plants );
+
+            return;
+        }
+
+
+        DatabaseReference ref = database.getReference( "users" )
+                .child( userId )
+                .child( "plants" );
 
         ref.addValueEventListener( new ValueEventListener() {
             @Override
