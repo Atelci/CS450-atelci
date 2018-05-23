@@ -1,6 +1,7 @@
 package com.example.bugra.mapzz.ui.profile;
 
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.util.Log;
 
@@ -14,24 +15,21 @@ public class ProfileActivityViewModel extends BaseViewModel {
 
     private static final String TAG = "ProfileActivityVM";
 
-    public ObservableField<User> user = new ObservableField<>();
+    public User user;
+    public final ObservableBoolean isMyProfile = new ObservableBoolean( false );
     private final UserRepository userRepository = new UserRepository();
 
-    public void fetchUser( String userId ) {
+    public void fetchUserData( User user ) {
 
-        if( userId.length() == 0 ) {
-            FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.user = user;
 
-            if( authUser == null ) {
-                //  TODO: Show error and finish activity
-                Log.d( TAG, "fetchUser: no auth user found" );
-                return;
-            }
+        FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            user.set( new User( authUser ) );
+        if( authUser != null && user.getUserId().equals( authUser.getUid() ) ) {
+            isMyProfile.set( true );
         }
         else {
-            userRepository.getUser( user, userId );
+            isMyProfile.set( false );
         }
     }
 }

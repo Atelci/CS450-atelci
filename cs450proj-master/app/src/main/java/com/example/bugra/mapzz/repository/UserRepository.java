@@ -12,6 +12,17 @@ public class UserRepository {
 
     public void getUser( ObservableField<User> user, String userId ) {
 
+        if( userId.equals( "random" ) ) {
+            user.set( getRandomUser() );
+        }
+    }
 
+    public User getRandomUser() {
+        return new User(
+                "",
+                "Random User",
+                "http://lorempixel.com/400/400/people/",
+                "Random User Bio"
+        );
     }
 }

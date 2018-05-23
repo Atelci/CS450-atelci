@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="com.example.bugra.mapzz.ui.profile.ProfileActivityViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -28,7 +30,8 @@
             app:backgroundTint="@android:color/white"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{ viewModel.isMyProfile ? View.VISIBLE : View.GONE }"/>
 
         <ImageView
             android:id="@+id/profile_picture"
@@ -66,11 +69,11 @@
             android:background="@drawable/border"
             android:ellipsize="end"
             android:maxLength="500"
-            android:minLines="1"
+            android:minLines="3"
             android:padding="@dimen/unit"
             android:text="@{ viewModel.user.bio ?? @string/no_bio }"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@{ viewModel.user.bio == null ? @android:color/darker_gray : null }"
+            android:textColor="@{ viewModel.user.bio == null ? @android:color/darker_gray : @color/colorAccent }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_display_name"

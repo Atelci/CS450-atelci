@@ -59,7 +59,7 @@ public class PlantRepository {
                 Plant.TYPE.values()[ type ],
                 plantNames[ plantName ],
                 rating,
-                ""
+                "random"
         );
     }
 }

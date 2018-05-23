@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.bugra.mapzz.R;
 import com.example.bugra.mapzz.BR;
+import com.example.bugra.mapzz.R;
+import com.example.bugra.mapzz.model.User;
 import com.example.bugra.mapzz.ui.common.BaseActivity;
 import com.example.bugra.mapzz.ui.profile_settings.ProfileSettingsActivity;
 
@@ -21,14 +22,16 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
 
         viewModel = ViewModelProviders.of( this ).get( ProfileActivityViewModel.class );
 
         mViewDataBinding.setVariable( BR.viewModel, viewModel );
 
-        viewModel.fetchUser( getIntent().getStringExtra( "userId" ) );
+        User user = (User) getIntent().getExtras().getSerializable( "user" );
+
+        viewModel.fetchUserData( user );
 
         findViewById( R.id.profile_edit_button ).setOnClickListener( profileEditButtonClickListener );
     }

@@ -163,8 +163,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         public void onClick( View view ) {
             Intent intent = new Intent( MapActivity.this, ProfileActivity.class );
 
-            //  Empty string indicates to show the auth user's profile
-            intent.putExtra( "userId", "" );
+            Bundle bundle = new Bundle();
+            bundle.putSerializable( "user", viewModel.authUser.get() );
+            intent.putExtras( bundle );
 
             startActivity( intent );
             overridePendingTransition( R.anim.up1, R.anim.up2 );

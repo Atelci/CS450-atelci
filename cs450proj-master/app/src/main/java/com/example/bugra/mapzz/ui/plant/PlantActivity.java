@@ -29,8 +29,7 @@ public class PlantActivity extends BaseActivity {
 
         mViewDataBinding.setVariable( BR.viewModel, viewModel );
 
-
-        viewModel.plant = (Plant) getIntent().getExtras().getSerializable( "plant" );
+        viewModel.fetchPlantData( (Plant) getIntent().getExtras().getSerializable( "plant" ) );
 
         findViewById( R.id.plant_profile_card ).setOnClickListener( profileClickListener );
     }
@@ -39,7 +38,11 @@ public class PlantActivity extends BaseActivity {
         @Override
         public void onClick( View view ) {
             Intent intent = new Intent( PlantActivity.this, ProfileActivity.class );
-            intent.putExtra( "userId", viewModel.user.getUserId() );
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable( "user", viewModel.user.get() );
+            intent.putExtras( bundle );
+
             startActivity( intent );
         }
     } ;
